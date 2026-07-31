@@ -3,6 +3,7 @@
  * XPS Ship endpoint for Zen Cart 2.2.2 / PHP 8.5.
  *
  * @license https://www.gnu.org/licenses/old-licenses/gpl-2.0.html GPL-2.0
+ * @version 1.0.0
  */
 
 declare(strict_types=1);
