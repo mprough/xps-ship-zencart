@@ -2,6 +2,8 @@
 
 An updated XPS Ship endpoint for **Zen Cart 2.2.2** and **PHP 8.5**. It lets XPS Ship download pending orders and update an order after shipment.
 
+Current version: **1.0.0**
+
 This project is based on the [XPS ZenCart integration instructions](https://docs.xpsship.com/en/cart-integrations/cart-integrations-instructions/zencart-integration~7422058046514754200).
 
 ## Files
@@ -50,6 +52,10 @@ Also exempt the `update` action. Do not broadly exempt unknown bots or all PHP f
 
 - Zen Cart 2.2.2
 - PHP 8.5
+
+## Release history
+
+- **1.0.0** — Initial public release.
 
 ## License and trademarks
 
