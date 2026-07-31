@@ -1,0 +1,6 @@
+*.log
+*.zip
+.DS_Store
+Thumbs.db
+includes/configure.php
+admin/includes/configure.php
