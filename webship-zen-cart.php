@@ -154,7 +154,10 @@ function xpsUpdateAction($db): never
         xpsRespond(['Error' => 'Order Number Does not Exist'], 400);
     }
     if ($statusValue === '') {
-        xpsRespond(['Error' => 'Order Status Update Unsuccessful'], 400);
+        $postFields = implode(', ', array_keys($_POST));
+        xpsRespond([
+            'Error' => 'Order Status Update Unsuccessful. Status was empty. POST fields: ' . $postFields,
+        ], 400);
     }
 
     $record = $db->Execute(
