@@ -52,7 +52,6 @@ $isXpsWebshipRequest =
     && isset($_GET['action'], $_POST['admin_name'], $_POST['admin_pass'])
     && is_string($_GET['action'])
     && in_array($_GET['action'], ['getOrder', 'update'], true);
-// === XPS SHIP MERGE: END ===
 
 // POST calls require a valid securityToken to prevent CSRF attacks.
 
@@ -72,6 +71,7 @@ if (!$isXpsWebshipRequest && (isset($_GET['action']) || isset($_POST['action']) 
         }
     }
 }
+// === XPS SHIP MERGE: END ===
 
 // -----
 // The following array of GET variable keys might show up in mixed case, which can affect canonical URLs.
@@ -338,4 +338,3 @@ $page_directory = $code_page_directory;
 $sanitizedRequest = Request::capture();
 
 $zco_notifier->notify('NOTIFY_INIT_SANITIZE_ENDS');
-
