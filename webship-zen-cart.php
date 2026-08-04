@@ -146,14 +146,14 @@ function xpsGetOrderAction($db): never
 function xpsUpdateAction($db): never
 {
     $orderNumber = filter_var($_GET['order_number'] ?? null, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
-    $statusName = strtolower(xpsPostString('status'));
+    $statusValue = xpsPostString('status');
     $trackingCompany = xpsPostString('tracking_company');
     $comment = xpsPostString('comment');
 
     if ($orderNumber === false || $orderNumber === null) {
         xpsRespond(['Error' => 'Order Number Does not Exist'], 400);
     }
-    if ($statusName === '') {
+    if ($statusValue === '') {
         xpsRespond(['Error' => 'Order Status Update Unsuccessful'], 400);
     }
 
@@ -164,13 +164,22 @@ function xpsUpdateAction($db): never
         xpsRespond(['Error' => 'Order Number Does not Exist'], 404);
     }
 
-    $status = $db->Execute(
-        "SELECT orders_status_id FROM " . TABLE_ORDERS_STATUS .
-        " WHERE language_id = " . (int)$_SESSION['languages_id'] .
-        " AND LOWER(orders_status_name) = '" . zen_db_input($statusName) . "' LIMIT 1"
-    );
+    if (ctype_digit($statusValue) && (int)$statusValue > 0) {
+        $status = $db->Execute(
+            "SELECT orders_status_id FROM " . TABLE_ORDERS_STATUS .
+            " WHERE language_id = " . (int)$_SESSION['languages_id'] .
+            " AND orders_status_id = " . (int)$statusValue . " LIMIT 1"
+        );
+    } else {
+        $statusName = strtolower($statusValue);
+        $status = $db->Execute(
+            "SELECT orders_status_id FROM " . TABLE_ORDERS_STATUS .
+            " WHERE language_id = " . (int)$_SESSION['languages_id'] .
+            " AND LOWER(orders_status_name) = '" . zen_db_input($statusName) . "' LIMIT 1"
+        );
+    }
     if ($status->EOF) {
-        xpsRespond(['Error' => 'Order Status Update Unsuccessful'], 400);
+        xpsRespond(['Error' => 'Order Status Update Unsuccessful. Received status: ' . $statusValue], 400);
     }
 
     $statusId = (int)$status->fields['orders_status_id'];
