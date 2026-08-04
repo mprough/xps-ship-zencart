@@ -167,14 +167,25 @@ function xpsUpdateAction($db): never
         xpsRespond(['Error' => 'Order Number Does not Exist'], 404);
     }
 
-    if (ctype_digit($statusValue) && (int)$statusValue > 0) {
+    $xpsStatusMap = [
+        'shipped' => 3,
+    ];
+    $normalizedStatus = strtolower($statusValue);
+
+    if (isset($xpsStatusMap[$normalizedStatus])) {
+        $status = $db->Execute(
+            "SELECT orders_status_id FROM " . TABLE_ORDERS_STATUS .
+            " WHERE language_id = " . (int)$_SESSION['languages_id'] .
+            " AND orders_status_id = " . $xpsStatusMap[$normalizedStatus] . " LIMIT 1"
+        );
+    } elseif (ctype_digit($statusValue) && (int)$statusValue > 0) {
         $status = $db->Execute(
             "SELECT orders_status_id FROM " . TABLE_ORDERS_STATUS .
             " WHERE language_id = " . (int)$_SESSION['languages_id'] .
             " AND orders_status_id = " . (int)$statusValue . " LIMIT 1"
         );
     } else {
-        $statusName = strtolower($statusValue);
+        $statusName = $normalizedStatus;
         $status = $db->Execute(
             "SELECT orders_status_id FROM " . TABLE_ORDERS_STATUS .
             " WHERE language_id = " . (int)$_SESSION['languages_id'] .
